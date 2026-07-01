@@ -101,6 +101,34 @@ data:
       presign_expiry_ns: 900000000000
       metrics_enabled: true
 
+security:
+  authn:
+    enabled: false
+    provider: __KERNEL_AUTHN_PROVIDER__
+    casdoor:
+      endpoint: http://127.0.0.1:8000
+      organization_name: built-in
+      application_name: app
+      client_id: app
+      client_secret: change-me
+      jwt_certificate_file: configs/casdoor.pub
+      timeout: 10000000000
+      metrics_enabled: true
+      admin:
+        enabled: false
+  authz:
+    enabled: false
+    provider: __KERNEL_AUTHZ_PROVIDER__
+    dev_allow_all: true
+    spicedb:
+      endpoint: 127.0.0.1:50051
+      token: ""
+      transport: grpc
+      insecure: true
+      timeout: 5000000000
+      fully_consistent: true
+      metrics_enabled: true
+
 audit:
   enabled: true
   store: memory
