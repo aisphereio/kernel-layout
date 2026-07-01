@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package todo.v1;
+
+import "api/aisphere/access/v1/access.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/aisphereio/kernel-layout/api/todo/v1;todov1";
+
+service TodoService {
+  rpc GetTodo(GetTodoRequest) returns (Todo) {
+    option (google.api.http) = {
+      get: "/v1/todos/{id}"
+    };
+    option (aisphere.access.v1.policy) = {
+      exposure: AUTHORIZED
+      authz: {
+        action: "read"
+        resource: "todo:{id}"
+        audience: "todo-service"
+        mode: CHECK_ONLY
+      }
+      audit: {
+        enabled: true
+        event: "todo.get"
+        risk: "low"
+      }
+      rate_limit: {
+        enabled: true
+        key: "principal"
+        qps: 100
+        burst: 200
+        backend: MEMORY
+      }
+    };
+  }
+
+  rpc ListTodos(ListTodosRequest) returns (ListTodosReply) {
+    option (google.api.http) = {
+      get: "/v1/todos"
+    };
+    option (aisphere.access.v1.policy) = {
+      exposure: AUTHENTICATED
+      audit: {
+        enabled: true
+        event: "todo.list"
+        risk: "low"
+      }
+    };
+  }
+}
+
+message GetTodoRequest {
+  string id = 1;
+}
+
+message ListTodosRequest {}
+
+message ListTodosReply {
+  repeated Todo todos = 1;
+}
+
+message Todo {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+  bool completed = 4;
+}
