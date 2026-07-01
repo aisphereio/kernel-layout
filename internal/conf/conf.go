@@ -3,6 +3,8 @@ package conf
 import (
 	"time"
 
+	"github.com/aisphereio/kernel/authn/casdoor"
+	"github.com/aisphereio/kernel/authz/spicedb"
 	"github.com/aisphereio/kernel/cachex"
 	"github.com/aisphereio/kernel/dbx"
 	"github.com/aisphereio/kernel/dtmx"
@@ -12,13 +14,14 @@ import (
 )
 
 type Bootstrap struct {
-	Service ServiceConfig `json:"service" yaml:"service"`
-	Server  ServerConfig  `json:"server" yaml:"server"`
-	Log     logx.Config   `json:"log" yaml:"log"`
-	Data    DataConfig    `json:"data" yaml:"data"`
-	Audit   AuditConfig   `json:"audit" yaml:"audit"`
-	Metrics MetricsConfig `json:"metrics" yaml:"metrics"`
-	DTM     dtmx.Config   `json:"dtm" yaml:"dtm"`
+	Service  ServiceConfig  `json:"service" yaml:"service"`
+	Server   ServerConfig   `json:"server" yaml:"server"`
+	Log      logx.Config    `json:"log" yaml:"log"`
+	Data     DataConfig     `json:"data" yaml:"data"`
+	Security SecurityConfig `json:"security" yaml:"security"`
+	Audit    AuditConfig    `json:"audit" yaml:"audit"`
+	Metrics  MetricsConfig  `json:"metrics" yaml:"metrics"`
+	DTM      dtmx.Config    `json:"dtm" yaml:"dtm"`
 }
 
 type ServiceConfig struct {
@@ -62,6 +65,24 @@ type CacheConfig struct {
 type ObjectStoreConfig struct {
 	Enabled bool                `json:"enabled" yaml:"enabled"`
 	Config  objectstorex.Config `json:"config" yaml:"config"`
+}
+
+type SecurityConfig struct {
+	Authn AuthnConfig `json:"authn" yaml:"authn"`
+	Authz AuthzConfig `json:"authz" yaml:"authz"`
+}
+
+type AuthnConfig struct {
+	Enabled  bool           `json:"enabled" yaml:"enabled"`
+	Provider string         `json:"provider" yaml:"provider"`
+	Casdoor  casdoor.Config `json:"casdoor" yaml:"casdoor"`
+}
+
+type AuthzConfig struct {
+	Enabled     bool           `json:"enabled" yaml:"enabled"`
+	Provider    string         `json:"provider" yaml:"provider"`
+	DevAllowAll bool           `json:"dev_allow_all" yaml:"dev_allow_all"`
+	SpiceDB     spicedb.Config `json:"spicedb" yaml:"spicedb"`
 }
 
 type AuditConfig struct {
