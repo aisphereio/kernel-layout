@@ -31,7 +31,7 @@ help:
 	@echo "  make tools        install codegen tools into .bin"
 	@echo "  make check-tools  check required tools in .bin"
 	@echo "  make api          generate api proto code by buf.gen.yaml"
-	@echo "  make proto-check  run buf lint and buf build"
+	@echo "  make proto-check  run buf lint and aisphere proto contract checks"
 	@echo "  make config       generate internal config proto code if buf.gen.config.yaml exists"
 	@echo "  make wire         generate dependency injection code"
 	@echo "  make generate     run go generate"
@@ -58,6 +58,10 @@ ifeq ($(OS),Windows_NT)
 	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1"
 	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-http@$(KERNEL_VERSION)"
 	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-errors@$(KERNEL_VERSION)"
+	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-authz@$(KERNEL_VERSION)"
+	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-gateway@$(KERNEL_VERSION)"
+	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-kernel@$(KERNEL_VERSION)"
+	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install $(KERNEL_MODULE)/cmd/buf-check-aisphere@$(KERNEL_VERSION)"
 	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.29.0"
 	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install github.com/bufbuild/buf/cmd/buf@v1.50.0"
 	@cmd /c "set GOBIN=$(LOCAL_BIN)&& $(GO) install github.com/google/wire/cmd/wire@v0.7.0"
@@ -68,6 +72,10 @@ else
 	@GOBIN=$(LOCAL_BIN) $(GO) install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
 	@GOBIN=$(LOCAL_BIN) $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-http@$(KERNEL_VERSION)
 	@GOBIN=$(LOCAL_BIN) $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-errors@$(KERNEL_VERSION)
+	@GOBIN=$(LOCAL_BIN) $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-authz@$(KERNEL_VERSION)
+	@GOBIN=$(LOCAL_BIN) $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-gateway@$(KERNEL_VERSION)
+	@GOBIN=$(LOCAL_BIN) $(GO) install $(KERNEL_MODULE)/cmd/protoc-gen-go-kernel@$(KERNEL_VERSION)
+	@GOBIN=$(LOCAL_BIN) $(GO) install $(KERNEL_MODULE)/cmd/buf-check-aisphere@$(KERNEL_VERSION)
 	@GOBIN=$(LOCAL_BIN) $(GO) install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.29.0
 	@GOBIN=$(LOCAL_BIN) $(GO) install github.com/bufbuild/buf/cmd/buf@v1.50.0
 	@GOBIN=$(LOCAL_BIN) $(GO) install github.com/google/wire/cmd/wire@v0.7.0
@@ -82,6 +90,10 @@ ifeq ($(OS),Windows_NT)
 	@cmd /c "if not exist .bin\protoc-gen-go-grpc.exe echo missing .bin\protoc-gen-go-grpc.exe && exit /b 1"
 	@cmd /c "if not exist .bin\protoc-gen-go-http.exe echo missing .bin\protoc-gen-go-http.exe && exit /b 1"
 	@cmd /c "if not exist .bin\protoc-gen-go-errors.exe echo missing .bin\protoc-gen-go-errors.exe && exit /b 1"
+	@cmd /c "if not exist .bin\protoc-gen-go-authz.exe echo missing .bin\protoc-gen-go-authz.exe && exit /b 1"
+	@cmd /c "if not exist .bin\protoc-gen-go-gateway.exe echo missing .bin\protoc-gen-go-gateway.exe && exit /b 1"
+	@cmd /c "if not exist .bin\protoc-gen-go-kernel.exe echo missing .bin\protoc-gen-go-kernel.exe && exit /b 1"
+	@cmd /c "if not exist .bin\buf-check-aisphere.exe echo missing .bin\buf-check-aisphere.exe && exit /b 1"
 	@cmd /c "if not exist .bin\protoc-gen-grpc-gateway.exe echo missing .bin\protoc-gen-grpc-gateway.exe && exit /b 1"
 	@cmd /c "if not exist .bin\protoc-gen-openapiv2.exe echo missing .bin\protoc-gen-openapiv2.exe && exit /b 1"
 else
@@ -91,6 +103,10 @@ else
 	@test -x "$(LOCAL_BIN)/protoc-gen-go-grpc" || (echo "missing $(LOCAL_BIN)/protoc-gen-go-grpc"; exit 1)
 	@test -x "$(LOCAL_BIN)/protoc-gen-go-http" || (echo "missing $(LOCAL_BIN)/protoc-gen-go-http"; exit 1)
 	@test -x "$(LOCAL_BIN)/protoc-gen-go-errors" || (echo "missing $(LOCAL_BIN)/protoc-gen-go-errors"; exit 1)
+	@test -x "$(LOCAL_BIN)/protoc-gen-go-authz" || (echo "missing $(LOCAL_BIN)/protoc-gen-go-authz"; exit 1)
+	@test -x "$(LOCAL_BIN)/protoc-gen-go-gateway" || (echo "missing $(LOCAL_BIN)/protoc-gen-go-gateway"; exit 1)
+	@test -x "$(LOCAL_BIN)/protoc-gen-go-kernel" || (echo "missing $(LOCAL_BIN)/protoc-gen-go-kernel"; exit 1)
+	@test -x "$(LOCAL_BIN)/buf-check-aisphere" || (echo "missing $(LOCAL_BIN)/buf-check-aisphere"; exit 1)
 	@test -x "$(LOCAL_BIN)/protoc-gen-grpc-gateway" || (echo "missing $(LOCAL_BIN)/protoc-gen-grpc-gateway"; exit 1)
 	@test -x "$(LOCAL_BIN)/protoc-gen-openapiv2" || (echo "missing $(LOCAL_BIN)/protoc-gen-openapiv2"; exit 1)
 endif
@@ -105,9 +121,11 @@ endif
 proto-check: check-tools
 ifeq ($(OS),Windows_NT)
 	@cmd /c "set PATH=$(LOCAL_BIN);%PATH%&& .bin\buf.exe lint"
+	@cmd /c "set PATH=$(LOCAL_BIN);%PATH%&& .bin\buf.exe build -o - | .bin\buf-check-aisphere.exe"
 	@cmd /c "set PATH=$(LOCAL_BIN);%PATH%&& .bin\buf.exe build -o .bin\layout-descriptor.bin"
 else
 	@PATH="$(LOCAL_BIN):$$PATH" $(LOCAL_BIN)/buf lint
+	@PATH="$(LOCAL_BIN):$$PATH" $(LOCAL_BIN)/buf build -o - | $(LOCAL_BIN)/buf-check-aisphere
 	@PATH="$(LOCAL_BIN):$$PATH" $(LOCAL_BIN)/buf build -o $(LOCAL_BIN)/layout-descriptor.bin
 endif
 
