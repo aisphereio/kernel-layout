@@ -1,0 +1,55 @@
+service:
+  name: app
+  version: dev
+  env: local
+
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout_ns: 1000000000
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout_ns: 1000000000
+
+log:
+  service_name: app
+  env: local
+  version: dev
+  level: info
+  format: console
+  output: stdout
+  add_source: true
+
+data:
+  database:
+    enabled: false
+    config:
+      driver: __KERNEL_DB_DRIVER__
+  cache:
+    enabled: false
+    config:
+      driver: __KERNEL_CACHE_DRIVER__
+  object_store:
+    enabled: false
+    config:
+      driver: __KERNEL_OBJECTSTORE_DRIVER__
+
+security:
+  authn:
+    enabled: false
+    provider: __KERNEL_AUTHN_PROVIDER__
+  authz:
+    enabled: false
+    provider: __KERNEL_AUTHZ_PROVIDER__
+    dev_allow_all: true
+
+audit:
+  enabled: true
+  store: memory
+
+metrics:
+  enabled: false
+  addr: 127.0.0.1:9090
+  path: /metrics
+  pprof: false
+  runtime: true
