@@ -2,67 +2,121 @@ syntax = "proto3";
 
 package todo.v1;
 
-import "api/aisphere/access/v1/access.proto";
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/aisphereio/kernel-layout/api/todo/v1;todov1";
+option go_package = "github.com/aisphereio/kernel-layout/api/todo/v1;v1";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.todo.v1";
+option java_outer_classname = "TodoProto";
 
+// TodoService provides a simple CRUD example for managing todo items.
+// It demonstrates unary, server-streaming, and bidirectional-streaming RPCs
+// together with AIP-style list filtering, ordering, and pagination.
 service TodoService {
-  rpc GetTodo(GetTodoRequest) returns (Todo) {
+  rpc CreateTodo (CreateTodoRequest) returns (Todo) {
+    option (google.api.http) = {
+      post: "/v1/todos/create"
+      body: "todo"
+    };
+  }
+
+  rpc GetTodo (GetTodoRequest) returns (Todo) {
     option (google.api.http) = {
       get: "/v1/todos/{id}"
     };
-    option (aisphere.access.v1.policy) = {
-      exposure: AUTHORIZED
-      authz: {
-        action: "read"
-        resource: "todo:{id}"
-        audience: "todo-service"
-        mode: CHECK_ONLY
-      }
-      audit: {
-        enabled: true
-        event: "todo.get"
-        risk: "low"
-      }
-      rate_limit: {
-        enabled: true
-        key: "principal"
-        qps: 100
-        burst: 200
-        backend: MEMORY
-      }
-    };
   }
 
-  rpc ListTodos(ListTodosRequest) returns (ListTodosReply) {
+  rpc ListTodos (ListTodosRequest) returns (TodoSet) {
     option (google.api.http) = {
-      get: "/v1/todos"
-    };
-    option (aisphere.access.v1.policy) = {
-      exposure: AUTHENTICATED
-      audit: {
-        enabled: true
-        event: "todo.list"
-        risk: "low"
-      }
+      get: "/v1/todos/list"
     };
   }
-}
 
-message GetTodoRequest {
-  string id = 1;
-}
+  rpc UpdateTodo (UpdateTodoRequest) returns (Todo) {
+    option (google.api.http) = {
+      put: "/v1/todos/update"
+      body: "todo"
+    };
+  }
 
-message ListTodosRequest {}
+  rpc DeleteTodo (DeleteTodoRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/todos/{id}"
+    };
+  }
 
-message ListTodosReply {
-  repeated Todo todos = 1;
+  rpc WatchTodos (WatchTodosRequest) returns (stream TodoEvent) {
+    option (google.api.http) = {
+      get: "/v1/todos/watch"
+    };
+  }
+
+  rpc SyncTodos (stream SyncTodoRequest) returns (stream TodoEvent) {
+    option (google.api.http) = {
+      post: "/v1/todos/sync"
+      body: "*"
+    };
+  }
 }
 
 message Todo {
-  string id = 1;
+  int64 id = 1;
   string title = 2;
   string content = 3;
   bool completed = 4;
+  google.protobuf.Timestamp create_time = 5;
+  google.protobuf.Timestamp update_time = 6;
+}
+
+message TodoSet {
+  repeated Todo todos = 1;
+  string next_page_token = 2;
+}
+
+message CreateTodoRequest {
+  Todo todo = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetTodoRequest {
+  int64 id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListTodosRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  string filter = 3;
+  string order_by = 4;
+}
+
+message UpdateTodoRequest {
+  Todo todo = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteTodoRequest {
+  int64 id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message WatchTodosRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  string filter = 3;
+  string order_by = 4;
+}
+
+message SyncTodoRequest {
+  string action = 1;
+  Todo todo = 2;
+  int64 id = 3;
+  google.protobuf.FieldMask update_mask = 4;
+}
+
+message TodoEvent {
+  string action = 1;
+  Todo todo = 2;
+  google.protobuf.Timestamp event_time = 3;
 }
