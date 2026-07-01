@@ -2,7 +2,7 @@ GO ?= go
 BUF ?= buf
 
 KERNEL_MODULE ?= github.com/aisphereio/kernel
-KERNEL_VERSION ?= __KERNEL_VERSION__
+KERNEL_VERSION ?= latest
 
 APP_NAME ?= server
 APP_CMD ?= ./cmd/$(APP_NAME)
