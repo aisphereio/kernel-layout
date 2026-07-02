@@ -65,6 +65,20 @@ internal/data/        Repositories and Kernel resource initialization
 .kernel/              Layout profile/feature overlays consumed by kernel new
 ```
 
+
+## Local Kernel generator workflow
+
+When the Kernel generator is being changed together with this layout, install tools from the local Kernel checkout instead of a released module version:
+
+```powershell
+make tools-local KERNEL_LOCAL=../kernel
+make api
+make proto-check
+make test
+```
+
+The layout must keep generated services on the Kernel path: proto contract -> generated request info/access/gateway metadata -> HTTP/gRPC middleware -> business service.
+
 ## Generate
 
 ```bash

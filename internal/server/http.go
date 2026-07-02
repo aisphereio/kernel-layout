@@ -33,6 +33,9 @@ func NewHTTPServer(cfg conf.ServerConfig, logCfg logx.Config, metricsCfg conf.Me
 	if metricsCfg.Enabled {
 		opts = append(opts, khttp.Metrics(metrics))
 	}
+	if m := todoServerMiddlewares(resources); len(m) > 0 {
+		opts = append(opts, khttp.Middleware(m...))
+	}
 	srv := khttp.NewServer(opts...)
 	v1.RegisterTodoServiceHTTPServer(srv, todo)
 	srv.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
