@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package todo.v1;
 
-import "api/aisphere/access/v1/access.proto";
+import "aisphere/access/v1/access.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";

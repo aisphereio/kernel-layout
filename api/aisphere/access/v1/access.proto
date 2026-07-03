@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package aisphere.access.v1;
 
-import "api/aisphere/options/v1/authz.proto";
+import "aisphere/options/v1/authz.proto";
 import "google/protobuf/descriptor.proto";
 
 option go_package = "github.com/aisphereio/kernel/api/aisphere/access/v1;accessv1";

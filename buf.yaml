@@ -1,9 +1,12 @@
 version: v2
 modules:
-  - path: .
+  - path: api
 lint:
   use:
-    - DEFAULT
+    - STANDARD
+  except:
+    - ENUM_VALUE_PREFIX
+    - RPC_RESPONSE_STANDARD_NAME
 deps:
   - buf.build/googleapis/googleapis
   - buf.build/grpc-ecosystem/grpc-gateway
