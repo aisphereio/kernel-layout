@@ -10,7 +10,7 @@ import (
 	kgrpc "github.com/aisphereio/kernel/transportx/grpc"
 )
 
-func NewGRPCServer(c conf.ServerConfig, logCfg logx.Config, metricsCfg conf.MetricsConfig, logger logx.Logger, metrics metricsx.Manager, resources *data.Resources, todo *service.TodoService) *kgrpc.Server {
+func NewGRPCServer(c conf.ServerConfig, logCfg logx.Config, metricsCfg conf.MetricsConfig, logger logx.Logger, metrics metricsx.Manager, resources *data.Resources, todo *service.TodoService, securityCfg conf.SecurityConfig) *kgrpc.Server {
 	var opts []kgrpc.ServerOption
 	if c.GRPC.Addr != "" {
 		opts = append(opts, kgrpc.Address(c.GRPC.Addr))
@@ -25,7 +25,7 @@ func NewGRPCServer(c conf.ServerConfig, logCfg logx.Config, metricsCfg conf.Metr
 	if metricsCfg.Enabled {
 		opts = append(opts, kgrpc.Metrics(metrics))
 	}
-	if m := todoServerMiddlewares(resources); len(m) > 0 {
+	if m := todoServerMiddlewares(resources, securityCfg); len(m) > 0 {
 		opts = append(opts, kgrpc.Middleware(m...))
 	}
 	srv := kgrpc.NewServer(opts...)

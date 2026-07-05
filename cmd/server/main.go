@@ -76,8 +76,8 @@ func main() {
 	todoRepo := data.NewTodoRepo(dataStore)
 	todoUsecase := biz.NewTodoUsecase(todoRepo)
 	todoService := service.NewTodoService(todoUsecase)
-	httpServer := server.NewHTTPServer(bc.Server, bc.Log, bc.Metrics, logger, metrics, resources, todoService)
-	grpcServer := server.NewGRPCServer(bc.Server, bc.Log, bc.Metrics, logger, metrics, resources, todoService)
+	httpServer := server.NewHTTPServer(bc.Server, bc.Log, bc.Metrics, logger, metrics, resources, todoService, bc.Security)
+	grpcServer := server.NewGRPCServer(bc.Server, bc.Log, bc.Metrics, logger, metrics, resources, todoService, bc.Security)
 
 	options := []kernel.Option{
 		kernel.Name(bc.Service.Name),
