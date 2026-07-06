@@ -1,7 +1,6 @@
 package server
 
 import (
-	v1 "github.com/aisphereio/kernel-layout/api/todo/v1"
 	"github.com/aisphereio/kernel-layout/internal/conf"
 	"github.com/aisphereio/kernel-layout/internal/data"
 	"github.com/aisphereio/kernel-layout/internal/service"
@@ -31,7 +30,7 @@ func NewGRPCServer(c conf.ServerConfig, logCfg logx.Config, metricsCfg conf.Metr
 	}
 	srv := kgrpc.NewServer(opts...)
 	if err := serverx.RegisterGRPCServices(srv, TodoBindings(todo)...); err != nil {
-		v1.RegisterTodoServiceServer(srv, todo)
+		panic(err)
 	}
 	return srv
 }
