@@ -7,6 +7,7 @@ import (
 	"github.com/aisphereio/kernel-layout/internal/service"
 	"github.com/aisphereio/kernel/logx"
 	"github.com/aisphereio/kernel/metricsx"
+	"github.com/aisphereio/kernel/serverx"
 	kgrpc "github.com/aisphereio/kernel/transportx/grpc"
 )
 
@@ -29,6 +30,8 @@ func NewGRPCServer(c conf.ServerConfig, logCfg logx.Config, metricsCfg conf.Metr
 		opts = append(opts, kgrpc.Middleware(m...))
 	}
 	srv := kgrpc.NewServer(opts...)
-	v1.RegisterTodoServiceServer(srv, todo)
+	if err := serverx.RegisterGRPCServices(srv, TodoBindings(todo)...); err != nil {
+		v1.RegisterTodoServiceServer(srv, todo)
+	}
 	return srv
 }
