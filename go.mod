@@ -3,7 +3,7 @@ module github.com/aisphereio/kernel-layout
 go 1.25.8
 
 require (
-	github.com/aisphereio/kernel v0.2.1
+	github.com/aisphereio/kernel v0.2.3-0.20260706010653-0f88c272b4ef
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0
 	go.einride.tech/aip v0.86.3
 	google.golang.org/genproto/googleapis/api v0.0.0-20260511170946-3700d4141b60
