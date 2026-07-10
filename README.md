@@ -56,17 +56,32 @@ External dependencies are present in `configs/config.yaml`, but DB, cache, objec
 ## Layout
 
 ```text
-api/                 Protobuf APIs and generated HTTP/gRPC bindings
+api/                 Protobuf APIs and kernel HTTP/gRPC bindings
 cmd/server/          Application entrypoint, renamed to cmd/<service> by kernel new
-configs/             Local config with Kernel module defaults
+configs/             Local config with IAM module defaults
 deploy/generated/    Generated Gateway API HTTPRoute manifests split by exposure
-internal/conf/        Config DTOs scanned by configx
+internal/conf/        Config DTOs scanned by kernel
 internal/server/      Kernel HTTP and gRPC server construction
 internal/service/     Transport-facing Todo service
 internal/biz/         Use cases, domain contracts, errorx errors
 internal/data/        Repositories and Kernel resource initialization
-.kernel/              Layout profile/feature overlays consumed by kernel new
+.kernel/              Layout config/feature overlays consumed by kernel new
 ```
+
+## Module Usage Guides
+
+Detailed usage guides for each Kernel module, with real code examples from production services:
+
+| Module | Guide | Key Package |
+|--------|-------|-------------|
+| Config | [docs/modules/config.md](docs/modules/config.md) | `configx` |
+| Log | [docs/modules/log.md](docs/modules/log.md) | `logx` |
+| Metrics | [docs/modules/metrics.md](docs/modules/metrics.md) | `metricsx` |
+| Error | [docs/modules/error.md](docs/modules/error.md) | `errorx` |
+| AuthN | [docs/modules/authn.md](docs/modules/authn.md) | `authn` |
+| AuthZ / Access | [docs/modules/authz.md](docs/modules/authz.md) | `authz` / `accessx` |
+| DTM | [docs/modules/dtm.md](docs/modules/dtm.md) | `dtmx` |
+| Audit | [docs/modules/audit.md](docs/modules/audit.md) | `auditx` |
 
 ## Deploy route generation
 
