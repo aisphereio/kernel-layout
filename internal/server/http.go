@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	v1 "github.com/aisphereio/kernel-layout/api/todo/v1"
 	"github.com/aisphereio/kernel-layout/internal/conf"
 	"github.com/aisphereio/kernel-layout/internal/data"
 	"github.com/aisphereio/kernel-layout/internal/service"
 	"github.com/aisphereio/kernel/logx"
 	"github.com/aisphereio/kernel/metricsx"
+	"github.com/aisphereio/kernel/serverx"
 	khttp "github.com/aisphereio/kernel/transportx/http"
 )
 
@@ -37,7 +37,9 @@ func NewHTTPServer(cfg conf.ServerConfig, logCfg logx.Config, metricsCfg conf.Me
 		opts = append(opts, khttp.Middleware(m...))
 	}
 	srv := khttp.NewServer(opts...)
-	v1.RegisterTodoServiceHTTPServer(srv, todo)
+	if err := serverx.RegisterHTTPServices(srv, TodoBindings(todo)...); err != nil {
+		panic(err)
+	}
 	srv.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})

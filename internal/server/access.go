@@ -3,13 +3,9 @@ package server
 import (
 	"context"
 
-	v1 "github.com/aisphereio/kernel-layout/api/todo/v1"
 	"github.com/aisphereio/kernel-layout/internal/conf"
 	"github.com/aisphereio/kernel-layout/internal/data"
-	"github.com/aisphereio/kernel/accessx"
 	"github.com/aisphereio/kernel/middleware"
-	mwaccess "github.com/aisphereio/kernel/middleware/access"
-	"github.com/aisphereio/kernel/requestx"
 	"github.com/aisphereio/kernel/securityx"
 	"github.com/aisphereio/kernel/serverx"
 )
@@ -19,12 +15,11 @@ func todoServerMiddlewares(resources *data.Resources, cfg conf.SecurityConfig) [
 		return nil
 	}
 	securityRuntime := mustSecurityRuntime(cfg)
-	return serverx.ServerMiddlewareFromProviders(context.Background(), serverx.RuntimeProviders{
-		Security:            securityRuntime,
-		AccessGuard:         &resources.Access,
-		RequestInfoResolver: v1.TodoServiceRequestInfoResolver,
-		AccessResolver:      todoAccessResolver,
+	providers := TodoCatalog().RuntimeProviders(serverx.RuntimeProviders{
+		Security:    securityRuntime,
+		AccessGuard: &resources.Access,
 	})
+	return serverx.ServerMiddlewareFromProviders(context.Background(), providers)
 }
 
 func mustSecurityRuntime(cfg conf.SecurityConfig) *securityx.Runtime {
@@ -46,14 +41,3 @@ func mustSecurityRuntime(cfg conf.SecurityConfig) *securityx.Runtime {
 	}
 	return runtime
 }
-
-func todoAccessResolver(ctx context.Context, operation string, req any) (accessx.Check, bool, error) {
-	check, ok, err := v1.TodoServiceAccessResolver(ctx, operation, req)
-	if err != nil || ok {
-		return check, ok, err
-	}
-	return accessx.Check{}, false, nil
-}
-
-var _ requestx.Resolver = v1.TodoServiceRequestInfoResolver
-var _ mwaccess.Resolver = todoAccessResolver
