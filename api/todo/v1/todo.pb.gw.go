@@ -253,7 +253,7 @@ func request_TodoService_SyncTodos_0(ctx context.Context, marshaler runtime.Mars
 	}
 	dec := marshaler.NewDecoder(req.Body)
 	handleSend := func() error {
-		var protoReq SyncTodoRequest
+		var protoReq SyncTodosRequest
 		err := dec.Decode(&protoReq)
 		if errors.Is(err, io.EOF) {
 			return err
