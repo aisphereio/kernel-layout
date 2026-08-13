@@ -81,7 +81,7 @@ service TodoService {
     };
   }
 
-  rpc SyncTodos (stream SyncTodoRequest) returns (stream TodoEvent) {
+  rpc SyncTodos (stream SyncTodosRequest) returns (stream TodoEvent) {
     option (google.api.http) = {
       post: "/v1/todos/sync"
       body: "*"
@@ -140,7 +140,7 @@ message WatchTodosRequest {
   string order_by = 4;
 }
 
-message SyncTodoRequest {
+message SyncTodosRequest {
   string action = 1;
   Todo todo = 2;
   int64 id = 3;
