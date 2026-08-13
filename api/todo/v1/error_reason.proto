@@ -4,7 +4,7 @@ package todo.v1;
 
 option go_package = "github.com/aisphereio/kernel-layout/api/todo/v1;v1";
 option java_multiple_files = true;
-option java_package = "todo.v1";
+option java_package = "io.grpc.examples.todo.v1";
 option objc_class_prefix = "APITodoV1";
 
 enum ErrorReason {

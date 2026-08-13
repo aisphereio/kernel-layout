@@ -482,7 +482,7 @@ func (x *WatchTodosRequest) GetOrderBy() string {
 	return ""
 }
 
-type SyncTodoRequest struct {
+type SyncTodosRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Action        string                 `protobuf:"bytes,1,opt,name=action,proto3" json:"action,omitempty"`
 	Todo          *Todo                  `protobuf:"bytes,2,opt,name=todo,proto3" json:"todo,omitempty"`
@@ -492,20 +492,20 @@ type SyncTodoRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SyncTodoRequest) Reset() {
-	*x = SyncTodoRequest{}
+func (x *SyncTodosRequest) Reset() {
+	*x = SyncTodosRequest{}
 	mi := &file_todo_v1_todo_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SyncTodoRequest) String() string {
+func (x *SyncTodosRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SyncTodoRequest) ProtoMessage() {}
+func (*SyncTodosRequest) ProtoMessage() {}
 
-func (x *SyncTodoRequest) ProtoReflect() protoreflect.Message {
+func (x *SyncTodosRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_todo_v1_todo_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -517,33 +517,33 @@ func (x *SyncTodoRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SyncTodoRequest.ProtoReflect.Descriptor instead.
-func (*SyncTodoRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SyncTodosRequest.ProtoReflect.Descriptor instead.
+func (*SyncTodosRequest) Descriptor() ([]byte, []int) {
 	return file_todo_v1_todo_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *SyncTodoRequest) GetAction() string {
+func (x *SyncTodosRequest) GetAction() string {
 	if x != nil {
 		return x.Action
 	}
 	return ""
 }
 
-func (x *SyncTodoRequest) GetTodo() *Todo {
+func (x *SyncTodosRequest) GetTodo() *Todo {
 	if x != nil {
 		return x.Todo
 	}
 	return nil
 }
 
-func (x *SyncTodoRequest) GetId() int64 {
+func (x *SyncTodosRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *SyncTodoRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
+func (x *SyncTodosRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
 	if x != nil {
 		return x.UpdateMask
 	}
@@ -648,8 +648,8 @@ const file_todo_v1_todo_proto_rawDesc = "" +
 	"\n" +
 	"page_token\x18\x02 \x01(\tR\tpageToken\x12\x16\n" +
 	"\x06filter\x18\x03 \x01(\tR\x06filter\x12\x19\n" +
-	"\border_by\x18\x04 \x01(\tR\aorderBy\"\x99\x01\n" +
-	"\x0fSyncTodoRequest\x12\x16\n" +
+	"\border_by\x18\x04 \x01(\tR\aorderBy\"\x9a\x01\n" +
+	"\x10SyncTodosRequest\x12\x16\n" +
 	"\x06action\x18\x01 \x01(\tR\x06action\x12!\n" +
 	"\x04todo\x18\x02 \x01(\v2\r.todo.v1.TodoR\x04todo\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\x03R\x02id\x12;\n" +
@@ -659,7 +659,7 @@ const file_todo_v1_todo_proto_rawDesc = "" +
 	"\x06action\x18\x01 \x01(\tR\x06action\x12!\n" +
 	"\x04todo\x18\x02 \x01(\v2\r.todo.v1.TodoR\x04todo\x129\n" +
 	"\n" +
-	"event_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\teventTime2\x95\n" +
+	"event_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\teventTime2\x96\n" +
 	"\n" +
 	"\vTodoService\x12\xbc\x01\n" +
 	"\n" +
@@ -678,8 +678,8 @@ const file_todo_v1_todo_proto_rawDesc = "" +
 	"\n" +
 	"WatchTodos\x12\x1a.todo.v1.WatchTodosRequest\x1a\x12.todo.v1.TodoEvent\"x\x92\xf4\x18]\b\x03\x12(\n" +
 	"\x05watch\x12\x0ftodo:collection\x1a\ftodo-service \x01\x1a\x13\b\x01\x12\n" +
-	"todo.watch\x1a\x03low\"\x1a\b\x01\x12\tprincipal\x19\x00\x00\x00\x00\x00\x004@ ((\x01\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/todos/watch0\x01\x12\xba\x01\n" +
-	"\tSyncTodos\x12\x18.todo.v1.SyncTodoRequest\x1a\x12.todo.v1.TodoEvent\"{\x92\xf4\x18^\b\x03\x12'\n" +
+	"todo.watch\x1a\x03low\"\x1a\b\x01\x12\tprincipal\x19\x00\x00\x00\x00\x00\x004@ ((\x01\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/todos/watch0\x01\x12\xbb\x01\n" +
+	"\tSyncTodos\x12\x19.todo.v1.SyncTodosRequest\x1a\x12.todo.v1.TodoEvent\"{\x92\xf4\x18^\b\x03\x12'\n" +
 	"\x04sync\x12\x0ftodo:collection\x1a\ftodo-service \x01\x1a\x15\b\x01\x12\ttodo.sync\x1a\x06medium\"\x1a\b\x01\x12\tprincipal\x19\x00\x00\x00\x00\x00\x004@ ((\x01\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/todos/sync(\x010\x01B[\n" +
 	"\x18io.grpc.examples.todo.v1B\tTodoProtoP\x01Z2github.com/aisphereio/kernel-layout/api/todo/v1;v1b\x06proto3"
 
@@ -705,7 +705,7 @@ var file_todo_v1_todo_proto_goTypes = []any{
 	(*UpdateTodoRequest)(nil),     // 5: todo.v1.UpdateTodoRequest
 	(*DeleteTodoRequest)(nil),     // 6: todo.v1.DeleteTodoRequest
 	(*WatchTodosRequest)(nil),     // 7: todo.v1.WatchTodosRequest
-	(*SyncTodoRequest)(nil),       // 8: todo.v1.SyncTodoRequest
+	(*SyncTodosRequest)(nil),      // 8: todo.v1.SyncTodosRequest
 	(*TodoEvent)(nil),             // 9: todo.v1.TodoEvent
 	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
 	(*fieldmaskpb.FieldMask)(nil), // 11: google.protobuf.FieldMask
@@ -718,8 +718,8 @@ var file_todo_v1_todo_proto_depIdxs = []int32{
 	0,  // 3: todo.v1.CreateTodoRequest.todo:type_name -> todo.v1.Todo
 	0,  // 4: todo.v1.UpdateTodoRequest.todo:type_name -> todo.v1.Todo
 	11, // 5: todo.v1.UpdateTodoRequest.update_mask:type_name -> google.protobuf.FieldMask
-	0,  // 6: todo.v1.SyncTodoRequest.todo:type_name -> todo.v1.Todo
-	11, // 7: todo.v1.SyncTodoRequest.update_mask:type_name -> google.protobuf.FieldMask
+	0,  // 6: todo.v1.SyncTodosRequest.todo:type_name -> todo.v1.Todo
+	11, // 7: todo.v1.SyncTodosRequest.update_mask:type_name -> google.protobuf.FieldMask
 	0,  // 8: todo.v1.TodoEvent.todo:type_name -> todo.v1.Todo
 	10, // 9: todo.v1.TodoEvent.event_time:type_name -> google.protobuf.Timestamp
 	2,  // 10: todo.v1.TodoService.CreateTodo:input_type -> todo.v1.CreateTodoRequest
@@ -728,7 +728,7 @@ var file_todo_v1_todo_proto_depIdxs = []int32{
 	5,  // 13: todo.v1.TodoService.UpdateTodo:input_type -> todo.v1.UpdateTodoRequest
 	6,  // 14: todo.v1.TodoService.DeleteTodo:input_type -> todo.v1.DeleteTodoRequest
 	7,  // 15: todo.v1.TodoService.WatchTodos:input_type -> todo.v1.WatchTodosRequest
-	8,  // 16: todo.v1.TodoService.SyncTodos:input_type -> todo.v1.SyncTodoRequest
+	8,  // 16: todo.v1.TodoService.SyncTodos:input_type -> todo.v1.SyncTodosRequest
 	0,  // 17: todo.v1.TodoService.CreateTodo:output_type -> todo.v1.Todo
 	0,  // 18: todo.v1.TodoService.GetTodo:output_type -> todo.v1.Todo
 	1,  // 19: todo.v1.TodoService.ListTodos:output_type -> todo.v1.TodoSet

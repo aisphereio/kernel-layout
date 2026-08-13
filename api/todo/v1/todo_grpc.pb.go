@@ -39,7 +39,7 @@ type TodoServiceClient interface {
 	UpdateTodo(ctx context.Context, in *UpdateTodoRequest, opts ...grpc.CallOption) (*Todo, error)
 	DeleteTodo(ctx context.Context, in *DeleteTodoRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	WatchTodos(ctx context.Context, in *WatchTodosRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[TodoEvent], error)
-	SyncTodos(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SyncTodoRequest, TodoEvent], error)
+	SyncTodos(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SyncTodosRequest, TodoEvent], error)
 }
 
 type todoServiceClient struct {
@@ -119,18 +119,18 @@ func (c *todoServiceClient) WatchTodos(ctx context.Context, in *WatchTodosReques
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type TodoService_WatchTodosClient = grpc.ServerStreamingClient[TodoEvent]
 
-func (c *todoServiceClient) SyncTodos(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SyncTodoRequest, TodoEvent], error) {
+func (c *todoServiceClient) SyncTodos(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SyncTodosRequest, TodoEvent], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &TodoService_ServiceDesc.Streams[1], TodoService_SyncTodos_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[SyncTodoRequest, TodoEvent]{ClientStream: stream}
+	x := &grpc.GenericClientStream[SyncTodosRequest, TodoEvent]{ClientStream: stream}
 	return x, nil
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type TodoService_SyncTodosClient = grpc.BidiStreamingClient[SyncTodoRequest, TodoEvent]
+type TodoService_SyncTodosClient = grpc.BidiStreamingClient[SyncTodosRequest, TodoEvent]
 
 // TodoServiceServer is the server API for TodoService service.
 // All implementations must embed UnimplementedTodoServiceServer
@@ -142,7 +142,7 @@ type TodoServiceServer interface {
 	UpdateTodo(context.Context, *UpdateTodoRequest) (*Todo, error)
 	DeleteTodo(context.Context, *DeleteTodoRequest) (*emptypb.Empty, error)
 	WatchTodos(*WatchTodosRequest, grpc.ServerStreamingServer[TodoEvent]) error
-	SyncTodos(grpc.BidiStreamingServer[SyncTodoRequest, TodoEvent]) error
+	SyncTodos(grpc.BidiStreamingServer[SyncTodosRequest, TodoEvent]) error
 	mustEmbedUnimplementedTodoServiceServer()
 }
 
@@ -171,7 +171,7 @@ func (UnimplementedTodoServiceServer) DeleteTodo(context.Context, *DeleteTodoReq
 func (UnimplementedTodoServiceServer) WatchTodos(*WatchTodosRequest, grpc.ServerStreamingServer[TodoEvent]) error {
 	return status.Errorf(codes.Unimplemented, "method WatchTodos not implemented")
 }
-func (UnimplementedTodoServiceServer) SyncTodos(grpc.BidiStreamingServer[SyncTodoRequest, TodoEvent]) error {
+func (UnimplementedTodoServiceServer) SyncTodos(grpc.BidiStreamingServer[SyncTodosRequest, TodoEvent]) error {
 	return status.Errorf(codes.Unimplemented, "method SyncTodos not implemented")
 }
 func (UnimplementedTodoServiceServer) mustEmbedUnimplementedTodoServiceServer() {}
@@ -297,11 +297,11 @@ func _TodoService_WatchTodos_Handler(srv interface{}, stream grpc.ServerStream) 
 type TodoService_WatchTodosServer = grpc.ServerStreamingServer[TodoEvent]
 
 func _TodoService_SyncTodos_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(TodoServiceServer).SyncTodos(&grpc.GenericServerStream[SyncTodoRequest, TodoEvent]{ServerStream: stream})
+	return srv.(TodoServiceServer).SyncTodos(&grpc.GenericServerStream[SyncTodosRequest, TodoEvent]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type TodoService_SyncTodosServer = grpc.BidiStreamingServer[SyncTodoRequest, TodoEvent]
+type TodoService_SyncTodosServer = grpc.BidiStreamingServer[SyncTodosRequest, TodoEvent]
 
 // TodoService_ServiceDesc is the grpc.ServiceDesc for TodoService service.
 // It's only intended for direct use with grpc.RegisterService,

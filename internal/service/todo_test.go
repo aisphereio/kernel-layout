@@ -130,7 +130,7 @@ func TestTodoServiceWatchAndSync(t *testing.T) {
 		t.Fatalf("WatchTodos() events = %+v, want one snapshot", watch.events)
 	}
 
-	sync := &syncTodosStream{fakeServerStream: fakeServerStream{ctx: ctx}, requests: []*v1.SyncTodoRequest{{Action: "create", Todo: &v1.Todo{Title: "streamed todo"}}, {Action: "delete", Id: 2}}}
+	sync := &syncTodosStream{fakeServerStream: fakeServerStream{ctx: ctx}, requests: []*v1.SyncTodosRequest{{Action: "create", Todo: &v1.Todo{Title: "streamed todo"}}, {Action: "delete", Id: 2}}}
 	if err := svc.SyncTodos(sync); err != nil {
 		t.Fatalf("SyncTodos() error = %v", err)
 	}
@@ -160,11 +160,11 @@ func (s *watchTodosStream) Send(event *v1.TodoEvent) error {
 
 type syncTodosStream struct {
 	fakeServerStream
-	requests []*v1.SyncTodoRequest
+	requests []*v1.SyncTodosRequest
 	events   []*v1.TodoEvent
 }
 
-func (s *syncTodosStream) Recv() (*v1.SyncTodoRequest, error) {
+func (s *syncTodosStream) Recv() (*v1.SyncTodosRequest, error) {
 	if len(s.requests) == 0 {
 		return nil, io.EOF
 	}
